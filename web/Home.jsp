@@ -30,6 +30,8 @@
         </style>
 
     </head>
+
+
     <body>
         <jsp:include page="Header.jsp"></jsp:include>
             <!--navbar-->
@@ -78,6 +80,8 @@
             </div>
         </div>
 
+
+        <%--<c:if test="${acc.getIsAdmin() != 1}">--%>
         <section class="hero ">
             <div class="container">
                 <div class="row">
@@ -169,50 +173,79 @@
                 </div>
 
                 <div class="row featured__filter">
-                    <c:forEach items="${listP}" var="o">
-                        <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
-                            <div class="featured__item">
-                                <div class="featured__item__pic set-bg"> <a href="detail?pro_id=${o.pro_id}"><img src="${o.pro_image}"></a>
-                                    <ul class="featured__item__pic__hover">
-                                        <c:if test="${sessionScope.acc == null}">
-                                            <li><a href="Login.jsp"><i class="fa fa-shopping-cart"> </i></a></li>
-                                            </c:if>
-
-                                        <c:if test="${sessionScope.acc != null}">
-                                            <li><a href="Cart.jsp"><i class="fa fa-shopping-cart"> </i></a></li>
-                                            </c:if>
-                                    </ul>
-                                </div>
-                                <div class="featured__item__text">
-                                    <h6>${o.pro_name}</a</h6>
-                                    <h5>${o.pro_price} VNĐ</h5>
+                    <c:if test="${listByCID == null}">
+                        <c:forEach items="${listP}" var="o">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg"> <a href="detail?pro_id=${o.pro_id}"><img src="${o.pro_image}"></a>
+                                        <ul class="featured__item__pic__hover">
+                                            <c:if test="${sessionScope.acc == null}">
+                                                <li><a href="Login.jsp"><i class="fa fa-shopping-cart"> </i></a></li>
+                                                </c:if>
+                                                <c:if test="${sessionScope.acc != null}">
+                                                <!--<li><a href="Cart.jsp"><i class="fa fa-shopping-cart"> </i></a></li>-->
+                                                <li><a href="cart?pro_id=${o.pro_id}"><i class="fa fa-shopping-cart"> </i></a></li>
+                                                </c:if>
+                                        </ul>
+                                    </div>
+                                    <div class="featured__item__text">
+                                        <h6>${o.pro_name}</a</h6>
+                                        <h5>${o.pro_price} VNĐ</h5>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </c:forEach>
+                        </c:forEach>
+                    </c:if> 
+
+
+                    <c:if test="${listByCID != null}">
+                        <c:forEach items="${listByCID}" var="o">
+                            <div class="col-lg-3 col-md-4 col-sm-6 mix oranges fresh-meat">
+                                <div class="featured__item">
+                                    <div class="featured__item__pic set-bg"> <a href="detail?pro_id=${o.pro_id}"><img src="${o.pro_image}"></a>
+                                        <ul class="featured__item__pic__hover">
+                                            <c:if test="${sessionScope.acc == null}">
+                                                <li><a href="Login.jsp"><i class="fa fa-shopping-cart"> </i></a></li>
+                                                </c:if>
+
+                                            <c:if test="${sessionScope.acc != null}">
+                                                <li><a href="Cart.jsp"><i class="fa fa-shopping-cart"> </i></a></li>
+                                                </c:if>
+                                        </ul>
+                                    </div>
+                                    <div class="featured__item__text">
+                                        <h6>${o.pro_name}</a</h6>
+                                        <h5>${o.pro_price} VNĐ</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </c:if> 
 
                 </div>
             </div>
 
         </section>
         <!-- Featured Section End -->
+        <%--</c:if>--%>
     </body>
 
+    <script src="js/popup.js"></script>
     <script>
-        function validateForm() {
-            var textSearch = document.getElementById("textSearch").value.trim(); // Trim whitespace
+                                    function validateForm() {
+                                        var textSearch = document.getElementById("textSearch").value.trim(); // Trim whitespace
 
-            var textError = document.getElementById("textError");
+                                        var textError = document.getElementById("textError");
 
-            var hasError = false;
-            if (textSearch === "") {
-                textError.innerText = "Điền vào ô này";
-                hasError = true;
-            } else {
-                textError.innerText = "";
-            }
-            return !hasError;
-        }
+                                        var hasError = false;
+                                        if (textSearch === "") {
+                                            textError.innerText = "Điền vào ô này";
+                                            hasError = true;
+                                        } else {
+                                            textError.innerText = "";
+                                        }
+                                        return !hasError;
+                                    }
     </script>
 
     <jsp:include page="Footer.jsp"></jsp:include>

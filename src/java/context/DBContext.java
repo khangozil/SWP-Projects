@@ -24,7 +24,7 @@ public class DBContext {
         String port = "1433";
         String database = "Tuesday";
         String user = "sa";
-        String password = "sa";
+        String password = "1";
 
         try {
             // Khai bao driver

@@ -33,7 +33,6 @@ public class FeedbackDAO {
     LocalDate date = java.time.LocalDate.now();
     LocalTime time = java.time.LocalTime.now();
 
-
     public void addFeedback(String fb_id, String content, Date date, Time time, String username) {
         String query = "INSERT INTO feedback \n"
                 + "VALUES (?, ?, ?,?,?)";
@@ -54,22 +53,23 @@ public class FeedbackDAO {
     }
 
     public List<Feedback> getAllFeedbacks() {
-        List<Feedback> listF = new ArrayList<>();
+        List<Feedback> listF1 = new ArrayList<>();
         String query = "select * from feedback";// test ben SQL
         try {
             conn = DBContext.connect();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                listF.add(new Feedback(rs.getString(1),
+                listF1.add(new Feedback(rs.getString(1),
                         rs.getString(2),
-                        rs.getString(3),
-                        rs.getString(4)));
+                        rs.getDate(3),
+                        rs.getTime(4),
+                        rs.getString(5)));
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return listF;
+        return listF1;
     }
 
     public static void main(String[] args) {
@@ -88,10 +88,79 @@ public class FeedbackDAO {
 //        
         Date date = java.sql.Date.valueOf(localDate);
         Time time = java.sql.Time.valueOf(localTime);
+//        
+//        System.out.println(date);
+//        System.out.println(time);
+//        dao.addFeedback("fb02", "rau ngon vãi", date, time, "user01");
+        UUID uuid = UUID.randomUUID();
+        String fb_id = uuid.toString();
+        dao.addFeedback(fb_id, "oke", date, time, "user01");
 
-        List<Feedback> a = dao.getAllFeedbacks();
-        for (Feedback t : a) {
-            System.out.println(t.getFb_date());
+    }
+
+    public void deleteFeedback(String fid) {
+        String sql = "Delete from feedback where fb_id=?";
+        try {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, fid);
+            ps.executeUpdate();
+        } catch (Exception e) {
         }
     }
+
+    public Feedback getFeedbackByFBID(String fbid) {
+        String query = "  select * from feedback where fb_id= ?";
+        try {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, fbid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Feedback(rs.getString(1), rs.getString(2), rs.getDate(3), rs.getTime(4), rs.getString(5));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Feedback> getFeedbackByAccID(String accid) {
+        List<Feedback> listF = new ArrayList<>();
+        String query = "select * from feedback where acc_id =?";
+        try {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, accid);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listF.add(new Feedback(rs.getString(1),
+                        rs.getString(2),
+                        rs.getDate(3),
+                        rs.getTime(4),
+                        rs.getString(5)));
+            }
+
+        } catch (Exception e) {
+
+        }
+        return listF;
+    }
+
+    public void updateFeedback(String content, Date date, Time time, String id) {
+        String query = "update feedback set fb_content =? , fb_date =?, fb_time=?  where fb_id =?";
+        try {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, content);
+            ps.setDate(2, date);
+            ps.setTime(3, time);
+            ps.setString(4, id);
+            ps.executeUpdate();
+        } catch (Exception e) {
+
+        }
+
+    }
+
 }

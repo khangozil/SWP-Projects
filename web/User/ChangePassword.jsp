@@ -15,57 +15,13 @@
                 margin-top: 10px;
                 color: red;
             }
-            .text-succes{
-                margin-top: 20px;
-                color: green;
-            }
-
-            /*popup*/
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1; 
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%; 
-                overflow: auto;
-                background-color: rgb(0,0,0); 
-                background-color: rgba(0,0,0,0.4); 
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            .modal-content {
-                background-color: #fefefe;
-                margin: auto;
-                padding: 40px;
-                border: 1px solid #888;
-                width: 80%;
-                max-width: 400px;
-                text-align: center;
-            }
-
-            .close {
-                color: #aaa;
-                float: right;
-                font-size: 28px;
-                font-weight: bold;
-            }
-
-            .close:hover,
-            .close:focus {
-                color: black;
-                text-decoration: none;
-                cursor: pointer;
-            }
         </style>
     </head>
 
     <body>
         <section class="container">
             <header>Thay đổi mật khẩu</header>
+            <p class="text-danger">${mess}</p>
             <form action="${pageContext.request.contextPath}/changePassword" method="post" class="form" onsubmit="return validateForm()">
                 <div class="input-box">
                     <label>Nhập mật khẩu hiện tại</label>
@@ -96,7 +52,6 @@
             </div>
         </section>
 
-        <script src="js/popup.js"></script>
         <script>
                 function validateForm() {
                     var oldPassword = document.getElementById("oldpassword").value;

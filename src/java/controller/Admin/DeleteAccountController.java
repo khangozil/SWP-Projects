@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author ADMIN
+ * @author Quynhh Nhuu
  */
-@WebServlet(name = "UpdateProfileController", urlPatterns = {"/updateProfile"})
-public class UpdateProfileController extends HttpServlet {
+@WebServlet(name = "DeleteAccountController", urlPatterns = {"/deleteAccount"})
+public class DeleteAccountController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,21 +32,15 @@ public class UpdateProfileController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");;
-
-        String username = request.getParameter("acc_id");
-        String name = request.getParameter("fullname");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String mail = request.getParameter("mail");
-        String gender = request.getParameter("gender");
-        String role = request.getParameter("role");
-        Integer roleValue = Integer.parseInt(role);
+         String acc_id = request.getParameter("acc_id");
 
         AccountDAO dao = new AccountDAO();
 
-        dao.updateProfileForAdmin(username, name, phone, address, mail, gender, roleValue);
-        request.setAttribute("messSuccess", "Cập nhật thông tin tài khoản thành công!");
+        if(acc_id != null){
+            dao.deleteAccount(acc_id);
+            request.setAttribute("messSuccess", "Xóa tài khoản thành công!");
+        }
+        
         request.getRequestDispatcher("manageAccount").forward(request, response);
     }
 

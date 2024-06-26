@@ -376,7 +376,7 @@ public class AccountDAO {
             ps.setString(3, address);
             ps.setString(4, gender);
             ps.setString(5, mail);
-            ps.setInt(6, role); 
+            ps.setInt(6, role);
             ps.setString(7, id);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -414,6 +414,81 @@ public class AccountDAO {
             }
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Lỗi", e);
+        }
+        return list;
+    }
+
+    public void deleteAccount(String id) {
+        String query = "DELETE FROM account WHERE acc_id = ? ";
+        try {
+            conn = new DBContext().connect();//mo ket noi voi sql
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Xử lý ngoại lệ khi gặp lỗi thực thi câu lệnh SQL
+        } finally {
+            // Đóng kết nối và tài nguyên
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public Account searchAccountsById(String id) {
+        String query = "select * from account\n"
+                + "where acc_id=?";
+        try {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Account(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getInt(8));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Account> searchAccountsByName(String textSearch) {
+        List<Account> list = new ArrayList<>();
+        String query = "select * from account\n"
+                + "where acc_name like ?";
+        try {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, "%" + textSearch + "%");
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new Account(rs.getString(1),
+                        rs.getString(2),
+                        rs.getString(3),
+                        rs.getString(4),
+                        rs.getString(5),
+                        rs.getString(6),
+                        rs.getString(7),
+                        rs.getInt(8)));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }

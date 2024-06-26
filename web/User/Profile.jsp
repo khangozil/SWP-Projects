@@ -161,7 +161,7 @@
                                 </tbody>
                             </table>
                             <div>
-                                <a href="ChangeProfile.jsp" class="site-btn">
+                                <a href="User/ChangeProfile.jsp" class="site-btn">
                                     Cập nhật thông tin</a>
                             </div>
                         </div>

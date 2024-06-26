@@ -6,7 +6,10 @@
 package controller.Admin;
 
 import DAO.AccountDAO;
+import entity.Account;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author ADMIN
+ * @author Quynhh Nhuu
  */
-@WebServlet(name = "UpdateProfileController", urlPatterns = {"/updateProfile"})
-public class UpdateProfileController extends HttpServlet {
+@WebServlet(name = "SearchAccountCotroller", urlPatterns = {"/searchAccount"})
+public class SearchAccountCotroller extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,25 +35,26 @@ public class UpdateProfileController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");;
-
-        String username = request.getParameter("acc_id");
-        String name = request.getParameter("fullname");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String mail = request.getParameter("mail");
-        String gender = request.getParameter("gender");
-        String role = request.getParameter("role");
-        Integer roleValue = Integer.parseInt(role);
+        String textSearch = request.getParameter("text");
+        String option = request.getParameter("option");
 
         AccountDAO dao = new AccountDAO();
 
-        dao.updateProfileForAdmin(username, name, phone, address, mail, gender, roleValue);
-        request.setAttribute("messSuccess", "Cập nhật thông tin tài khoản thành công!");
-        request.getRequestDispatcher("manageAccount").forward(request, response);
+        //by code
+        if (option.equals("1")) {
+            Account acc = dao.searchAccountsById(textSearch);
+            request.setAttribute("acc", acc);
+        } else if (option.equals("2")) {
+            List<Account> list = dao.searchAccountsByName(textSearch);
+            request.setAttribute("listA", list);
+        } else {
+            request.setAttribute("listA", "");
+        }
+
+        request.getRequestDispatcher("Admin/ManageAccount.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

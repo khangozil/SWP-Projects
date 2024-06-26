@@ -14,6 +14,10 @@
                 margin-top: 10px;
                 color: red;
             }
+            .text-success{
+                margin-top: 10px;
+                color: green;
+            }
         </style>
     </head>
 
@@ -21,6 +25,7 @@
         <section class="container">
             <header>Đăng nhập</header>
             <p class="text-danger">${mess}</p>
+            <p class="text-success">${messSuccess}</p>
             <form action="login" method="post" class="form" onsubmit="return validateForm()">
                 <div class="input-box">
                     <label>Tài khoản</label>

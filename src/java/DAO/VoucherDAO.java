@@ -5,7 +5,6 @@
  */
 package DAO;
 
-import static com.sun.xml.internal.ws.spi.db.BindingContextFactory.LOGGER;
 import context.DBContext;
 import entity.Voucher;
 import java.sql.Connection;
@@ -14,7 +13,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -31,7 +29,7 @@ public class VoucherDAO {
         List<Voucher> list = new ArrayList<>();
         String query = "select * from voucher";
         try {
-            conn = DBContext.connect();
+            conn = new DBContext().connect();
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
@@ -60,7 +58,7 @@ public class VoucherDAO {
                 exists = true;
             }
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Lỗi", e);
+            e.printStackTrace();
         } finally {
             // Đóng ResultSet, PreparedStatement và Connection để tránh rò rỉ tài nguyên
             try {
@@ -74,7 +72,7 @@ public class VoucherDAO {
                     conn.close();
                 }
             } catch (Exception e) {
-                LOGGER.log(Level.SEVERE, "Lỗi", e);
+                e.printStackTrace();
             }
         }
         return exists;
@@ -113,7 +111,7 @@ public class VoucherDAO {
 //                exists = true;
 //            }
 //        } catch (Exception e) {
-//            LOGGER.log(Level.SEVERE, "Lỗi", e);
+//            e.printStackTrace();
 //        } finally {
 //            // Đóng ResultSet, PreparedStatement và Connection để tránh rò rỉ tài nguyên
 //            try {
@@ -127,7 +125,7 @@ public class VoucherDAO {
 //                    conn.close();
 //                }
 //            } catch (Exception e) {
-//                LOGGER.log(Level.SEVERE, "Lỗi", e);
+//                e.printStackTrace();
 //            }
 //        }
 //        return exists;
@@ -180,7 +178,7 @@ public class VoucherDAO {
           
             ps.executeUpdate();
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Lỗi", e);
+            e.printStackTrace();
         }
     }
 
@@ -208,11 +206,49 @@ public class VoucherDAO {
             }
         }
     }
-
-    public static void main(String[] args) {
-        VoucherDAO dao = new VoucherDAO();
-
-       dao.updateVoucher("vou0", "Null", 0.0);
-
+    
+    public Voucher getVoucherByCode(String voucherCode) {
+        Voucher voucher = null;
+        String query = "SELECT * FROM Voucher WHERE voucher_code = ?";
+        try  {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, voucherCode);
+             rs = ps.executeQuery();
+            if (rs.next()) {
+                voucher = new Voucher(
+                    rs.getString("voucher_id"),
+                    rs.getString("voucher_code"),
+                    rs.getFloat("discount_percentage")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return voucher;
     }
+    
+    
+        public Voucher getVoucherByID(String id) {
+        Voucher voucher = null;
+        String query = "SELECT * FROM Voucher WHERE voucher_id = ?";
+        try  {
+            conn = new DBContext().connect();
+            ps = conn.prepareStatement(query);
+            ps.setString(1, id);
+             rs = ps.executeQuery();
+            if (rs.next()) {
+                voucher = new Voucher(
+                    rs.getString("voucher_id"),
+                    rs.getString("voucher_code"),
+                    rs.getFloat("discount_percentage")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return voucher;
+    }
+    
+
 }

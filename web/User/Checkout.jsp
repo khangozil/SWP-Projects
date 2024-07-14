@@ -116,7 +116,6 @@
                                         <th>Số lượng</th>
                                         <th>Giá </th>
                                         <th>Tổng giá</th>
-                                        <th>Thao tác</th>
                                     </tr>
                                     <%  List<CartItem> items = cart.getItems();
                                         for (CartItem item : items) {
@@ -131,23 +130,7 @@
                                         <td><%= item.getQuantity()%></td>
                                         <td><%= product.getPro_price()%></td>
                                         <td><%= item.getQuantity() * product.getPro_price()%></td>
-                                        <td>
-                                            <form action="<c:url value='/QuantityUpdateServlet' />" method="post" style="display:inline;">
-                                                <input type="hidden" name="pro_id" value="<%= product.getPro_id()%>">
-                                                <input type="hidden" name="action" value="increase">
-                                                <input type="submit" value="Tăng số lượng">
-                                            </form>
-                                            <form action="<c:url value='/QuantityUpdateServlet' />" method="post" style="display:inline;">
-                                                <input type="hidden" name="pro_id" value="<%= product.getPro_id()%>">
-                                                <input type="hidden" name="action" value="decrease">
-                                                <input type="submit" value="Giảm số lượng" <%= item.getQuantity() <= 1 ? "disabled" : ""%>>
-                                            </form>
-                                            <form action="<c:url value='/RemoveItemServlet' />" method="post" style="display:inline;">
-                                                <input type="hidden" name="pro_id" value="<%= product.getPro_id()%>">
-                                                <input type="submit" value="Xóa">
-                                            </form>
 
-                                        </td>
                                     </tr>
                                     <%
                                         }
@@ -159,27 +142,20 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <div class="shoping__cart__btns">
-                            <a href="<c:url value='/home' />" class="primary-btn cart-btn">Tiếp Tục Mua Hàng</a>
-                           
-                        </div>
                     </div>
                     <div class="col-lg-6">
-                        <div class="shoping__continue">
-                            <div class="shoping__discount">
-                                <h5>Nhập mã giảm giá</h5>
-                                <form action="<c:url value='/ApplyVoucherServlet' />" method="post">
-                                    <input type="text" name="voucherCode" placeholder="Nhập voucher">
-                                    <input type="submit" value="Xác nhận voucher">
-                                </form>
+                        <div class="shoping__checkout">
+                            <form action="processCheckout" method="post">
+                                <label for="name"> Tên :</label>
+                                <input type="text" id="name" name="name" required><br>
 
-                                <c:if test="${not empty error}">
-                                    <p style="color: red;">${error}</p>
-                                </c:if>
-                                <c:if test="${not empty message}">
-                                    <p style="color: green;">${message}</p>
-                                </c:if>
-                            </div>
+                                <label for="address"> Địa chỉ </label>
+                                <input type="text" id="address" name="address" required><br>
+
+
+                                <label for="phone"> Số điện thoại </label>
+                                <input type="text" id="phone" name="phone" required><br>
+                            </form>
                         </div>
                     </div>
                     <div class="col-lg-6">
@@ -189,7 +165,9 @@
                                 <li>Tổng tiền<span><%= cart.getTotalPrice()%></span></li>
                                 <li>Đã giảm giá<span><%= cart.getTotalfinal()%></span></li>
                             </ul>
-                            <a href="Checkout.jsp" class="primary-btn">Đặt Hàng</a>
+                            <form action="../check-out" method="GET">
+                                <input type="submit" value="Xác Nhận Đặt Hàng" class="primary-btn"> 
+                            </form>
                         </div>
                     </div>
                 </div>
